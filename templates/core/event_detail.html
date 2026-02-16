@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Загрузка события...{% endblock %}
+
+{% block content %}
+<div id="event-detail-content">
+    <div class="text-center py-5">
+        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+            <span class="visually-hidden">Загрузка...</span>
+        </div>
+    </div>
+</div>
+
+<div class="d-none" id="content-template"> </div>
+
+<div id="main-layout" class="row g-4 d-none">
+    
+    <div class="col-lg-8">
+        
+        <!-- ЕДИНАЯ ГАЛЕРЕЯ (Главное фото + Дополнительные) -->
+        <div class="card shadow-sm mb-4 border-0 overflow-hidden">
+            <!-- Спиннер внутри галереи (пока грузится превью) -->
+            <div id="gallery-loader" class="d-flex justify-content-center align-items-center bg-light" style="height: 400px;">
+                <div class="spinner-border text-primary" role="status"></div>
+            </div>
+
+            <!-- Сама карусель (изначально скрыта) -->
+            <div id="mainCarousel" class="carousel slide d-none" data-bs-ride="carousel">
+                <!-- Индикаторы (точки внизу) -->
+                <div class="carousel-indicators" id="carousel-indicators">
+                    <!-- JS заполнит -->
+                </div>
+
+                <!-- Слайды -->
+                <div class="carousel-inner" id="carousel-inner">
+                    <!-- JS заполнит -->
+                </div>
+
+                <!-- Кнопки управления (будут показаны, если слайдов > 1) -->
+                <button class="carousel-control-prev d-none" id="btn-prev" type="button" data-bs-target="#mainCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon bg-dark bg-opacity-50 rounded-circle p-3" aria-hidden="true"></span>
+                    <span class="visually-hidden">Предыдущий</span>
+                </button>
+                <button class="carousel-control-next d-none" id="btn-next" type="button" data-bs-target="#mainCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon bg-dark bg-opacity-50 rounded-circle p-3" aria-hidden="true"></span>
+                    <span class="visually-hidden">Следующий</span>
+                </button>
+
+                <!-- Рейтинг поверх слайдера -->
+                <span class="position-absolute top-0 end-0 m-3 badge bg-warning text-dark fs-6 shadow z-3">
+                    ★ <span id="event-rating">0</span>/25
+                </span>
+            </div>
+        </div>
+
+        <!-- Описание -->
+        <div class="card shadow-sm mb-4 border-0">
+            <div class="card-body">
+                <h2 id="event-title" class="card-title mb-3 fw-bold"></h2>
+                <hr>
+                <div id="event-description" class="card-text text-secondary" style="line-height: 1.8;"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card shadow-sm mb-4 border-0">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Информация</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled mb-0">
+                    <li class="mb-3">
+                        <strong class="d-block text-muted small text-uppercase">Начало</strong>
+                        <span id="event-start" class="fs-5"></span>
+                    </li>
+                    <li class="mb-3">
+                        <strong class="d-block text-muted small text-uppercase">Завершение</strong>
+                        <span id="event-end" class="fs-5"></span>
+                    </li>
+                    <li class="mb-3">
+                        <strong class="d-block text-muted small text-uppercase">Место проведения</strong>
+                        <span id="venue-name" class="fw-bold"></span>
+                        <br>
+                        <a id="venue-coords" href="#" target="_blank" class="small text-decoration-none">📍 Показать на карте</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Виджет Погоды -->
+        <div id="weather-block" class="card shadow-sm border-0 d-none" style="background: linear-gradient(135deg, #e0f7fa 0%, #80deea 100%);">
+            <div class="card-body text-center">
+                <h5 class="card-title text-primary-emphasis mb-3">⛅ Погода на месте</h5>
+                
+                <div class="display-4 fw-bold text-dark mb-2">
+                    <span id="weather-temp"></span>°C
+                </div>
+                
+                <div class="row text-muted small border-top border-secondary pt-2 mt-2">
+                    <div class="col-4 border-end border-secondary">
+                        <div class="fw-bold">Влажность</div>
+                        <span id="weather-humidity"></span>%
+                    </div>
+                    <div class="col-4 border-end border-secondary">
+                        <div class="fw-bold">Ветер</div>
+                        <span id="weather-wind"></span> м/с
+                    </div>
+                    <div class="col-4">
+                        <div class="fw-bold">Давление</div>
+                        <span id="weather-pressure"></span>
+                    </div>
+                </div>
+                
+                <!-- Важное примечание -->
+                <div class="mt-3 small text-muted fst-italic border-top border-secondary-subtle pt-2">
+                    <span id="weather-note">* Данные обновлены автоматически</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-grid mt-4">
+            <a href="/" class="btn btn-outline-secondary">← Вернуться к списку</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    window.eventId = {{ event_id }};
+
+    function showContent() {
+        document.getElementById('event-detail-content').classList.add('d-none');
+        document.getElementById('main-layout').classList.remove('d-none');
+    }
+
+</script>
+<script src="{% static 'js/detail.js' %}"></script>
+<script>
+    const originalRender = renderEvent;
+    renderEvent = function(data) {
+        originalRender(data);
+        showContent();
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,11 @@
+* text=auto
+
+# Linux scripts must be LF
+*.sh text eol=lf
+*.py text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+
+# Windows scripts should be CRLF
+*.bat text eol=crlf
+*.cmd text eol=crlf

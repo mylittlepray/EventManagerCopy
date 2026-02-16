@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Главная - EventManager{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-3 mb-4">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-white border-0 pt-3">
+                <h5 class="card-title mb-0">🔍 Фильтры</h5>
+            </div>
+            <div class="card-body">
+                <form id="filterForm">
+                    <div class="mb-3">
+                        <label class="form-label small text-muted">Поиск</label>
+                        <input type="text" class="form-control" id="search" placeholder="Название или место...">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small text-muted">Сортировка</label>
+                        <select class="form-select" id="ordering">
+                            <option value="">По умолчанию</option>
+                            <option value="title">А-Я Название</option>
+                            <option value="start_at">Сначала ближайшие</option>
+                            <option value="-start_at">Сначала поздние</option>
+                            <option value="-end_at">По времени завершения</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small text-muted">Дата начала</label>
+                        <input type="datetime-local" class="form-control mb-1" id="start_at_after" title="От">
+                        <input type="datetime-local" class="form-control" id="start_at_before" title="До">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small text-muted">Дата завершения</label>
+                        <input type="datetime-local" class="form-control mb-1" id="end_at_after" title="От">
+                        <input type="datetime-local" class="form-control" id="end_at_before" title="До">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small text-muted">Рейтинг (0-25)</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" id="rating_min" placeholder="Min" min="0" max="25">
+                            <input type="number" class="form-control" id="rating_max" placeholder="Max" min="0" max="25">
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small text-muted">Место (ctrl+click)</label>
+                        <select multiple class="form-select" id="venueFilter" size="4">
+                        </select>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">Применить</button>
+                        <button type="reset" class="btn btn-outline-secondary" onclick="setTimeout(()=>loadEvents(), 10)">Сбросить</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-9">
+        <div id="events-container" class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
+        </div>
+
+        <nav class="mt-5" id="pagination">
+        </nav>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/main.js' %}"></script>
+{% endblock %}
