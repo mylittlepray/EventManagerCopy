@@ -1,5 +1,7 @@
 ***
 
+# CRITICAL BUG FIX
+
 # Django Event Manager API
 
 REST API сервис для управления мероприятиями, разработанный на Django 6 и Django REST Framework. Поддерживает работу с геоданными (PostGIS), асинхронные задачи (Celery), автоматический сбор погоды и рассылку уведомлений.
